@@ -1,5 +1,6 @@
 QT += core
 QT += network
+QT += dbus
 QT -= gui
 
 TARGET = QHwInterface
