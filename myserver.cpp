@@ -1,8 +1,8 @@
 #include "myserver.h"
-#include <iostream>
+#include "config.h"
 
 //-----------------------------------------------------------------------------
-MyServer::MyServer(QObject *parent) : QObject(parent)
+MyServer::MyServer(QObject *parent) : QObject(parent), connected(false)
 {
     server = new QTcpServer(this);
 
@@ -13,15 +13,15 @@ MyServer::MyServer(QObject *parent) : QObject(parent)
 //-----------------------------------------------------------------------------
 void MyServer::start()
 {
-    if (!(server->listen(QHostAddress::Any, 8001))) {
-        std::cout << server->errorString().toStdString() << std::endl;
+    if (!(server->listen(QHostAddress::Any, PORT_NUMBER))) {
+        qDebug() << server->errorString();
     }
 }
 
 //-----------------------------------------------------------------------------
 void MyServer::onConnection()
 {
-    std::cout << "OnConnection" << std::endl;
+    qDebug() << "OnConnection";
 
     socket = server->nextPendingConnection();
 
@@ -30,20 +30,33 @@ void MyServer::onConnection()
 
     connect(socket, SIGNAL(disconnected()),
             this,   SLOT(onDisconnected()));
+
+    connected = true;
 }
 
 //-----------------------------------------------------------------------------
 void MyServer::onData()
 {
-    std::cout << "OnData" << std::endl;
+    qDebug() << "OnData";
 
     QByteArray arr = socket->readAll();
 
-    std::cout << "<" << arr.constData() << ">" << std::endl;
+    qDebug() << "<" << arr.constData() << ">";
 }
 
 //-----------------------------------------------------------------------------
 void MyServer::onDisconnected()
 {
-    std::cout << "OnDisconnected" << std::endl;
+    qDebug() << "OnDisconnected";
+    connected = false;
+}
+
+//-----------------------------------------------------------------------------
+void MyServer::onMeasure(Data data)
+{
+    qDebug() << data.getJson();
+
+    if (connected) {
+        socket->write(data.getJson().toUtf8());
+    }
 }

@@ -3,10 +3,8 @@
 #include <QtCore/QDebug>
 #include "myserver.h"
 #include "mytimer.h"
-//#include <iostream>
 
-
-
+//-----------------------------------------------------------------------------
 void ListServices()
 {
     QDBusReply<QStringList> reply = QDBusConnection::systemBus().interface()->registeredServiceNames();
@@ -19,11 +17,16 @@ void ListServices()
 
 }
 
+//-----------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
     MyServer server;
+    MyTimer  timer;
+
+    QObject::connect(&timer, SIGNAL(measureReady(Data)),
+                     &server, SLOT(onMeasure(Data)));
 
     server.start();
 
