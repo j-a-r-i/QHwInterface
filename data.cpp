@@ -4,27 +4,80 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-//-----------------------------------------------------------------------------
-Data::Data() : temp1(0.0), temp2(0.0)
-{
+const QString Data::TEMP1 = QString("T1");
+const QString Data::TEMP2 = QString("T2");
+const QString Data::TEMP3 = QString("T3");
+const QString Data::TEMP4 = QString("T4");
 
+
+DataItem::DataItem()
+{
 }
+
+//-----------------------------------------------------------------------------
+DataItem::DataItem(const DataItem& other)
+{
+    set(other.getName(), other.getValue());
+}
+
+DataItem &DataItem::operator=(const DataItem &other)
+{
+    set(other.getName(), other.getValue());
+
+    return *this;
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+Data::Data()
+{
+    _list.append(new DataItem(Data::TEMP1, 0.0f));
+    _list.append(new DataItem(Data::TEMP2, 0.0f));
+    _list.append(new DataItem(Data::TEMP3, 0.0f));
+    _list.append(new DataItem(Data::TEMP4, 0.0f));
+}
+
+//-----------------------------------------------------------------------------
+void Data::set(QString name, float value)
+{
+    DataItem *iter;
+
+    foreach(iter, _list) {
+        if (iter->getName() == QString(name))
+        {
+            iter->setValue(value);
+            break;
+        }
+    }
+}
+
+//-----------------------------------------------------------------------------
+float Data::get(QString name)
+{
+    float ret = 0.0f;
+    DataItem *iter;
+
+    foreach(iter, _list) {
+        if (iter->getName() == QString(name))
+        {
+            ret = iter->getValue();
+            break;
+        }
+    }
+    return ret;
+}
+
 
 //-----------------------------------------------------------------------------
 QString Data::getJson()
 {
     QJsonObject obj;
-    obj["temp1"] = temp1;
-    obj["temp2"] = temp2;
+    DataItem *item;
+
+    foreach (item, _list) {
+        obj[item->getName()] = item->getValue();
+    }
 
     return QJsonDocument(obj).toJson(QJsonDocument::Compact);
-
-    /*QString str;
-    QTextStream out(&str);
-
-    out << "{"
-        << "\"temp1\":" << temp1 << ","
-        << "\"temp2\":" << temp2
-        << "}";
-    return str;*/
 }
