@@ -25,6 +25,8 @@ void Port::Open(QString filename)
         qDebug() << "Error opening file" << filename;
         _handle = 0;
     }
+#else
+    qDebug() << "opening " << filename;
 #endif
 }
 

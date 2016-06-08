@@ -12,26 +12,27 @@ SerialReader::SerialReader(QObject *parent) : QObject(parent)
     if (_port->open(QIODevice::ReadWrite)) {
     }
     else {
-        qDebug() << "Error can't open serialport!";
+        qDebug() << "Error can't open serialport! " << _port->errorString();
+        return;
     }
 
-    if (_port->setBaudRate(9600) != 0) {
+    if (!_port->setBaudRate(9600)) {
         qDebug() << "SerialReader setBaudRate " << _port->errorString();
         return;
     }
-    if (_port->setDataBits(QSerialPort::Data8) != 0) {
+    if (!_port->setDataBits(QSerialPort::Data8)) {
         qDebug() << "SerialReader setDataBits " << _port->errorString();
         return;
     }
-    if (_port->setParity(QSerialPort::NoParity) != 0) {
+    if (!_port->setParity(QSerialPort::NoParity)) {
         qDebug() << "SerialReader setParity " << _port->errorString();
         return;
     }
-    if (_port->setStopBits(QSerialPort::OneStop) != 0) {
+    if (!_port->setStopBits(QSerialPort::OneStop)) {
         qDebug() << "SerialReader setStopBits " << _port->errorString();
         return;
     }
-    if (_port->setFlowControl(QSerialPort::NoFlowControl) != 0) {
+    if (!_port->setFlowControl(QSerialPort::NoFlowControl)) {
         qDebug() << "SerialReader setFlowControl " << _port->errorString();
         return;
     }
@@ -43,13 +44,26 @@ SerialReader::SerialReader(QObject *parent) : QObject(parent)
 //-----------------------------------------------------------------------------
 void SerialReader::onRead()
 {
-    QByteArray msg = _port->readAll();
-    QString str(msg);
-    QStringList list = str.split(QChar(','));
+    //qDebug() << "ONREAD";
 
-    qDebug() << list;
+    if (_port->canReadLine()) {
+        QByteArray msg = _port->readLine();
+        QString str(msg);
+        QStringList list = str.split(QChar(' '));
 
-    data.set(Data::TEMP1, list[0].toFloat());
+        qDebug() << "onRead:" << list;
 
-    emit measureReady(data);
+        if (list[0] == QString("m")) {
+            bool status = false;
+            float t1 = list[2].toUInt(&status, 16) / 16.0f;
+            float t2 = list[3].toUInt(&status, 16) / 16.0f;
+
+            data.set(Data::TEMP1, t1);
+            data.set(Data::TEMP2, t2);
+            //data.set(Data::TEMP3, 0.0f);
+            //data.set(Data::TEMP4, 0.0f);
+
+            emit measureReady(data);
+        }
+    }
 }

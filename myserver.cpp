@@ -59,4 +59,7 @@ void MyServer::onMeasure(Data data)
     if (connected) {
         socket->write(data.getJson().toUtf8());
     }
+    else {
+        qDebug() << "No connection!";
+    }
 }
