@@ -6,9 +6,10 @@
 #include "wsserver.h"
 #include "mytimer.h"
 #include "serialreader.h"
+#include "btooth.h"
 
 //-----------------------------------------------------------------------------
-void ListServices()
+/*void ListServices()
 {
     QDBusReply<QStringList> reply = QDBusConnection::systemBus().interface()->registeredServiceNames();
     if (!reply.isValid()) {
@@ -18,7 +19,7 @@ void ListServices()
     foreach (QString name, reply.value())
         qDebug() << name;
 
-}
+}*/
 
 //-----------------------------------------------------------------------------
 int main(int argc, char *argv[])
@@ -43,14 +44,19 @@ int main(int argc, char *argv[])
     server.start();
 
 
-    WSServer *wserver = new WSServer();
+    WSServer wserver;
 
-    if (!QDBusConnection::systemBus().isConnected()) {
+    /*if (!QDBusConnection::systemBus().isConnected()) {
         qDebug() << "No dbus session bus!";
     }
     else {
         ListServices();
-    }
+    }*/
+
+
+    BTooth btooth;
+
+    btooth.StartScan();
 
     return a.exec();
 }

@@ -1,8 +1,9 @@
 QT += core
 QT += network
-QT += dbus
+#QT += dbus
 QT += serialport
 QT += websockets
+QT += bluetooth
 QT -= gui
 
 TARGET = QHwInterface
@@ -18,7 +19,8 @@ SOURCES += main.cpp \
     port.cpp \
     spi.cpp \
     serialreader.cpp \
-    wsserver.cpp
+    wsserver.cpp \
+    btooth.cpp
 
 HEADERS += \
     myserver.h \
@@ -28,5 +30,6 @@ HEADERS += \
     port.h \
     spi.h \
     serialreader.h \
-    wsserver.h
+    wsserver.h \
+    btooth.h
 

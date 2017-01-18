@@ -17,7 +17,7 @@ SerialReader::SerialReader(QObject *parent) : QObject(parent)
         return;
     }
 
-    if (!_port->setBaudRate(9600)) {
+    if (!_port->setBaudRate(RS_SPEED)) {
         qDebug() << "SerialReader setBaudRate " << _port->errorString();
         return;
     }

@@ -1,4 +1,5 @@
 #include "wsserver.h"
+#include "config.h"
 #include "QtWebSockets/qwebsocket.h"
 #include "QtWebSockets/qwebsocketserver.h"
 #include "QJsonDocument"
@@ -8,7 +9,7 @@ WSServer::WSServer(QObject *parent) : QObject(parent)
 {
     _server = new QWebSocketServer("QtServer",
                                    QWebSocketServer::NonSecureMode);
-    if (_server->listen(QHostAddress::AnyIPv4, 8010))
+    if (_server->listen(QHostAddress::AnyIPv4, WS_PORT_NO))
     {
         qDebug() << "WS: listening";
 
