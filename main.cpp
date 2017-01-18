@@ -1,8 +1,6 @@
 #include <QCoreApplication>
 #include <QtDBus/QtDBus>
 #include <QtCore/QDebug>
-#include <QSerialPort>
-#include <QSerialPortInfo>
 #include "config.h"
 #include "myserver.h"
 #include "wsserver.h"
@@ -37,9 +35,7 @@ int main(int argc, char *argv[])
 #else
     SerialReader rs232;
 
-    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
-        qDebug() << info.portName() << " - " << info.description();
-    }
+    rs232.ListPorts();
 
     QObject::connect(&rs232, SIGNAL(measureReady(Data)),
                      &server, SLOT(onMeasure(Data)));

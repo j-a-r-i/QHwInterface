@@ -11,6 +11,8 @@ class SerialReader : public QObject
 public:
     explicit SerialReader(QObject *parent = 0);
 
+    void ListPorts();
+
 signals:
     void measureReady(Data data);
 

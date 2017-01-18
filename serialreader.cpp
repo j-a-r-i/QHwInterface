@@ -1,3 +1,4 @@
+#include <QSerialPortInfo>
 #include "serialreader.h"
 #include "config.h"
 
@@ -39,6 +40,14 @@ SerialReader::SerialReader(QObject *parent) : QObject(parent)
 
     connect(_port, SIGNAL(readyRead()),
             this,  SLOT(onRead()));
+}
+
+//-----------------------------------------------------------------------------
+void SerialReader::ListPorts()
+{
+    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
+        qDebug() << info.portName() << " - " << info.description();
+    }
 }
 
 //-----------------------------------------------------------------------------
