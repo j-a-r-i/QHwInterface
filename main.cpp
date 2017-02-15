@@ -8,6 +8,8 @@
 #include "serialreader.h"
 #include "btooth.h"
 
+BTooth btooth;
+
 //-----------------------------------------------------------------------------
 /*void ListServices()
 {
@@ -20,6 +22,12 @@
         qDebug() << name;
 
 }*/
+
+//-----------------------------------------------------------------------------
+void afterBtScan()
+{
+    btooth.Connect();
+}
 
 //-----------------------------------------------------------------------------
 int main(int argc, char *argv[])
@@ -53,8 +61,6 @@ int main(int argc, char *argv[])
         ListServices();
     }*/
 
-
-    BTooth btooth;
 
     btooth.StartScan();
 

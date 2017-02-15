@@ -20,8 +20,9 @@ SOURCES += main.cpp \
     spi.cpp \
     serialreader.cpp \
     wsserver.cpp \
-    btooth.cpp
-
+    btooth.cpp \
+    application.cpp
+    
 HEADERS += \
     myserver.h \
     mytimer.h \
@@ -31,5 +32,6 @@ HEADERS += \
     spi.h \
     serialreader.h \
     wsserver.h \
-    btooth.h
+    btooth.h \
+    application.h
 
