@@ -20,9 +20,9 @@ void BTooth::StartScan()
     _agent->start();
 }
 
-void BTooth::Connect(const QBluetoothAddress &address)
+void BTooth::Connect(const QBluetoothAddress *address)
 {
-    _control = new QLowEnergyController(address, this);
+    _control = new QLowEnergyController(*address, this);
 
     connect(_control, SIGNAL(serviceDiscovered(QBluetoothUuid)),
             this,     SLOT(serviceDiscovered(QBluetoothUuid)));
@@ -66,10 +66,23 @@ void BTooth::scanEnd()
 {
     qDebug() << "BLE scan ended.";
     emit scanDone();
+
+    if (_devices.size() == 0)
+        qDebug() << "No device found.";
+    else {
+        BToothDevInfo* first = *(_devices.begin());
+
+        Connect(first->GetAddress());
+    }
 }
 
-void BTooth::serviceDiscovered(QBluetoothUuid uuid)
+void BTooth::serviceDiscovered(QBluetoothUuid gatt)
 {
+    qDebug() << "BLE service discovered " << gatt.toString();
+
+    //if (gatt == QBluetoothUuid(QBluetoothUuid::HeartRate)) {
+
+    //}
 }
 
 void BTooth::serviceScanDone()
@@ -107,6 +120,8 @@ void BTooth::controllerError(QLowEnergyController::Error err)
 void BTooth::deviceConnected()
 {
     qDebug() << "Device connected";
+
+    _control->discoverServices();
 }
 
 void BTooth::deviceDisconnected()

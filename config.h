@@ -11,7 +11,7 @@
 
 //#define SIMULATED
 
-//#define LINUX
+#define LINUX
 
 #ifdef LINUX
   #define RS_PORT "/dev/ttyS0"

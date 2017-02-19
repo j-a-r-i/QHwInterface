@@ -20,7 +20,7 @@ public:
         return _name;
     }
 
-    QBluetoothAddress * GteAddress() {
+    QBluetoothAddress * GetAddress() {
         return _address;
     }
 
@@ -37,7 +37,7 @@ public:
     explicit BTooth(QObject *parent = 0);
 
     void StartScan();
-    void Connect(const QBluetoothAddress &address);
+    void Connect(const QBluetoothAddress *address);
 
 
 

@@ -1,2 +1,4 @@
+*.o
 *.bak
+moc_*.cpp
 /.gitignore
